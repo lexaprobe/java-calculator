@@ -14,7 +14,8 @@ Loosely based on the Casio fx-82.
 
 ## How to build and run
 On macOS/Linux: `./gradlew run`  
-On Windows: `gradlew.bat run`
+On Windows: `gradlew.bat run`  
+To run the test suite (only macOS and Linux): `./test.sh`
 
 ## Resources
 Font used: [Casio fx-9860GII](https://www.dafont.com/casio-fx-9860gii.font)
