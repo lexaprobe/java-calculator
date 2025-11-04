@@ -22,7 +22,7 @@ public class Util {
       "+", "-", "÷", "×", "^"
   );
   private static final Set<String> functions = Set.of(
-      "sin", "cos", "tan", "√x", "√"
+      "sin", "cos", "tan", "√x", "√", "ln"
   );
   private static final Map<String, String> unarys = Map.of(
     "x!", "!"
@@ -50,8 +50,8 @@ public class Util {
         case "sin" -> { return new String[] {"sin (", ")"}; }
         case "cos" -> { return new String[] {"cos (", ")"}; }
         case "tan" -> { return new String[] {"tan (", ")"}; }
+        case "ln" -> { return new String[] {"ln (", ")"}; }
         case "√x" -> { return new String[] {"√"}; }
-        case "|x|" -> { return new String[] {"|", "|"}; }
         case "x!" -> { return new String[] {"!"}; }
       }
     }

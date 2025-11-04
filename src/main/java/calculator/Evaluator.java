@@ -27,7 +27,7 @@ import java.util.Stack;
 public class Evaluator {
 
   /**
-   * The entry point for evaluating an expression.
+   * Entry point for evaluating an expression.
    *
    * @param expression a space-seperated mathematical expression
    */
@@ -83,7 +83,7 @@ public class Evaluator {
 
   /**
    * Converts a tokenized infix expression into a postfix expression using an implementation of
-   * Dijkstra's <a href="https://en.wikipedia.org/wiki/Shunting_yard_algorithm">Shunting Yard algorithm</a>.
+   * the <a href="https://en.wikipedia.org/wiki/Shunting_yard_algorithm">Shunting Yard algorithm</a>.
    *
    * @param tokens an infix expression. Must have been tokenized using 
    *      <code>calculator.Evaluator.tokenize</code>
@@ -171,21 +171,21 @@ public class Evaluator {
             case "-" -> { stack.add(left.subtract(right)); }
             case "×" -> { stack.add(left.multiply(right)); }
             case "÷" -> {
-              if (right.compareTo(BigDecimal.ZERO) == 0) {
+              if (isZero(right)) {
                 throw new MathError("division by zero: '" + left + "÷" + right + "'");
               }
               stack.add(left.divide(right, 30, RoundingMode.HALF_UP));
             }
             case "(" -> { throw new SyntaxError("unclosed parenthesis"); }
             case "^" -> { 
-              if (left.compareTo(BigDecimal.ONE) == 0) {
+              if (isOne(left)) {
                 stack.add(BigDecimal.ONE);
-              } else if (left.compareTo(BigDecimal.ZERO) == 0) {
+              } else if (isZero(left)) {
                 stack.add(BigDecimal.ZERO);
               } else if (right.compareTo(BigDecimal.valueOf(2147483637)) == 1) {
                 throw new MathError("exceeded maximum exponent size");
               } else {
-                stack.add(left.pow(right.intValueExact()));
+                stack.add(exponentiate(left, right));
               }
             }
             default -> { throw new SyntaxError("unsupported operator: '" + operator + "'"); }
@@ -223,10 +223,23 @@ public class Evaluator {
             }
             case "tan" -> {
               double angle = Math.toRadians(value.doubleValue());
-              if (BigDecimal.valueOf(Math.cos(angle)).compareTo(BigDecimal.ZERO) == 0) {
+              if (isZero(BigDecimal.valueOf(Math.cos(angle)))) {
                 throw new SyntaxError("division by zero: 'tan(" + angle + ")'");
               }
               stack.add(BigDecimal.valueOf(Math.tan(angle)));
+            }
+            case "ln" -> {
+              if (isNegative(value)) {
+                throw new MathError("Logarithm of a negative number");
+              } else if (isZero(value)) {
+                throw new MathError("Logarithm of zero");
+              } else if (isOne(value)) {
+                stack.add(BigDecimal.ZERO);
+              } else if (value.doubleValue() == Math.E) {
+                stack.add(BigDecimal.ONE);
+              } else {
+                stack.add(ln(value));
+              }
             }
             case "√" -> {
               stack.add(value.sqrt(new MathContext(30, RoundingMode.HALF_UP)));
@@ -254,5 +267,39 @@ public class Evaluator {
       result = result.multiply(BigDecimal.valueOf(i));
     }
     return result;
+  }
+
+  /**
+   * Perform exponentiation between two BigDeciaml values.
+   * @param base
+   * @param exp
+   * @return result as a BigDecimal
+   */
+  public static BigDecimal exponentiate(BigDecimal base, BigDecimal exp) {
+    double dBase = base.doubleValue();
+    double dExp = exp.doubleValue();
+    return BigDecimal.valueOf(Math.pow(dBase, dExp));
+  }
+
+  /**
+   * Retrieve the natural logarithm of a BigDecimal.
+   * @param value
+   * @return result as a BigDecimal
+   */
+  public static BigDecimal ln(BigDecimal value) {
+    double dValue = value.doubleValue();
+    return BigDecimal.valueOf(Math.log(dValue));
+  }
+
+  private static boolean isZero(BigDecimal value) {
+    return value.compareTo(BigDecimal.ZERO) == 0;
+  }
+
+  private static boolean isOne(BigDecimal value) {
+    return value.compareTo(BigDecimal.ONE) == 0;
+  }
+
+  private static boolean isNegative(BigDecimal value) {
+    return value.compareTo(BigDecimal.ZERO) == -1;
   }
 }

@@ -15,7 +15,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class CalculatorApp extends Application {
-  private final double scale = 1.2;
+  private final double scale = 1.5;
   private final TextArea inputDisplay = new TextArea();
   private final TextArea outputDisplay = new TextArea();
   private final Map<String, Action> actions = Util.loadActions();
@@ -45,7 +45,7 @@ public class CalculatorApp extends Application {
     ver.getChildren().addAll(inputLabel, inputDisplay, outputLabel, outputDisplay);
     root.add(ver, 0, 0, 5, 2);
     String[] extraButtons = {
-      "√x", "|x|", "x!", "π", "e",
+      "ln", "√x", "x!", "π", "e",
       "sin", "cos", "tan", "(", ")"
     };
     String[] coreButtons = {
