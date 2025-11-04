@@ -1,4 +1,4 @@
-# Simple Calculator
+# Simple Java-Based Calculator
 
 A simple scientific calculator built with Gradle and javafx.
 Loosely based on the Casio fx-82.
