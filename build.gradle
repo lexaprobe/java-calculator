@@ -11,16 +11,17 @@ repositories {
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
 }
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(22) // desired java ver
+        languageVersion = JavaLanguageVersion.of(22)
     }
 }
 
 test {
-    // Use junit platform for unit tests
     useJUnitPlatform()
     testLogging {
         events "passed", "skipped", "failed" //, "standardOut", "standardError"
